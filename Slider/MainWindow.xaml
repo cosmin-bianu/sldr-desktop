@@ -1,0 +1,240 @@
+﻿<Window x:Class="Slider.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Slider"
+        mc:Ignorable="d"
+        Title="Slider" Height="614" Width="1200" ResizeMode="NoResize" WindowStyle="None">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true"/>
+                            <Trigger Property="IsMouseOver" Value="true"/>
+                            <Trigger Property="IsPressed" Value="true"/>
+                            <Trigger Property="IsEnabled" Value="false"/>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Color x:Key="RedOrangeGradier">#F6F67280</Color>
+        <Storyboard x:Key="OpenDeviceMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="BlackStrip">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1.706">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="BlackStrip">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-13.5">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuarticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BigMenu">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Visible}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.6" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BigMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SmallMenu">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SmallMenu">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseDeviceMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="BlackStrip">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1.706"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="BlackStrip">
+                <SplineDoubleKeyFrame KeyTime="0" Value="-13.5"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BigMenu">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BigMenu">
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SmallMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SmallMenu">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ExitPrompt">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="ExitPrompt">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TitleBarButtonsGrid">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TitleBarButtonsGrid">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Collapsed}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="ExitPromptReverse">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="ExitPrompt">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-54">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseInOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="TitleBarButtonsGrid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TitleBarButtonsGrid">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <!--<BeginStoryboard Storyboard="{StaticResource ExitPrompt}"/> -->
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid OpacityMask="Black" Cursor="Arrow">
+        <Grid.Background>
+            <ImageBrush ImageSource="Resource\Bitmaps\bg.png"/>
+        </Grid.Background>
+
+
+        <Rectangle x:Name="WhiteStrip" Fill="White" Height="350" Margin="0,153.936,800,0" VerticalAlignment="Top" Width="400"/>
+        <Image x:Name="QRCodeImage" Margin="50,180.936,0,133.064" Height="300" Width="300" HorizontalAlignment="Left" MouseEnter="QRCodeMouseEnter" MouseLeave="QRCodeMouseLeave"/>
+        <Grid x:Name="Logo" Margin="33,20.401,670,465.064">
+            <TextBlock HorizontalAlignment="Left" Height="128.535" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" FontSize="100" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Bold" Foreground="White"><Run Text="SLDR"/><LineBreak/><Run/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" Height="43.569" Margin="252,74.966,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110" FontSize="30" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Bold" Foreground="White" Text="alpha"/>
+
+
+        </Grid>
+        <TextBlock x:Name="qrCodeGuide" Margin="69,0,831,44.064" TextWrapping="Wrap" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Medium" FontSize="31" Text="Scan this to connect." Foreground="White" Height="45" VerticalAlignment="Bottom" Opacity="0"/>
+        <Rectangle x:Name="BlackStrip" Fill="#FF232323" HorizontalAlignment="Left" Height="350.724" Margin="400,153.074,0,0" VerticalAlignment="Top" Width="800" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Grid x:Name="BigMenu" HorizontalAlignment="Left" Height="515.936" Margin="442.667,54,0,0" VerticalAlignment="Top" Width="736.333" Visibility="Collapsed" Opacity="0">
+            <Menu x:Name="DeviceMenu" HorizontalAlignment="Left" Height="415" Margin="398.333,44,0,0" VerticalAlignment="Top" Width="309" Background="#FF323232" RenderTransformOrigin="0.5,0.5">
+                <Menu.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Menu.RenderTransform>
+            </Menu>
+            <TextBlock x:Name="Return" HorizontalAlignment="Left" Height="45" Margin="569.333,479.936,0,-9" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Light" FontSize="36" Text="Go back" Foreground="#FFFF007B" MouseLeftButtonDown="ReturnButtonPressed" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" Opacity="0.5"/>
+            <Grid x:Name="SinglePresenterSection" Margin="10,44,343,233.936">
+                <TextBlock x:Name="SinglePresenterModeInfoTB" HorizontalAlignment="Left" Height="136" TextWrapping="Wrap" Text="Single presenter mode" VerticalAlignment="Top" Width="161.333" FontSize="36" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Medium" Foreground="White"/>
+                <TextBlock x:Name="SinglePresenterModeBtn" HorizontalAlignment="Left" Height="92" Margin="187.333,23,0,0" TextWrapping="Wrap" Text="OFF" VerticalAlignment="Top" Width="196" FontSize="72" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Medium" Foreground="#FFFF007B" MouseLeftButtonDown="ToggleSinglePresenterMode" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" Opacity="0.5"/>
+                <TextBlock x:Name="SinglePresenterModeDescription" HorizontalAlignment="Left" Height="97" Margin="0,136,0,0" TextWrapping="Wrap" Text="Click at any time on the device which shall be the only one controlling the presentation" VerticalAlignment="Top" Width="373.333" FontSize="24" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Light" Foreground="#FF9B9B9B" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                    <TextBlock.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+        </Grid>
+        <Grid x:Name="SmallMenu" Margin="471.667,210,54,174">
+            <TextBlock x:Name="DevicesConnectedTB" HorizontalAlignment="Left" Height="182.936" Margin="0,27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="386" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Medium" FontSize="72" Foreground="White"><Run Text="Devices"/><LineBreak/><Run Text="connected"/></TextBlock>
+            <TextBlock x:Name="Counter" Height="230" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Foreground="Cyan" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Medium" FontSize="180" TextAlignment="Center" MouseLeftButtonDown="DeviceCounterClicked" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Right" Width="230" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" Opacity="0.5">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.614"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="1.489"/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="ExitPrompt" Margin="992.002,25.401,0,560" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="-54"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Rectangle Fill="White" HorizontalAlignment="Left" Height="43.599" VerticalAlignment="Top" Width="217.248" Margin="-9.25,-8.25,0,-6.75"/>
+
+
+            <TextBlock x:Name="AreYouSureTB" HorizontalAlignment="Left" Height="28.599" TextWrapping="Wrap" Text="Are you sure?" VerticalAlignment="Top" Width="124.666" Foreground="#FF232323" FontSize="20" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display" Margin="0,2.75,0,-2.75"/>
+            <TextBlock x:Name="YesBtn" HorizontalAlignment="Left" Height="25.849" Margin="132.916,2.75,0,0" TextWrapping="Wrap" Text="Yes" VerticalAlignment="Top" Width="36.666" Foreground="Cyan" FontSize="20" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display" Opacity="0.5" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" MouseLeftButtonDown="Exit"/>
+            <TextBlock x:Name="NoBtn" Height="25.849" Margin="174.582,2.75,6.75,0" TextWrapping="Wrap" Text="No" VerticalAlignment="Top" Foreground="#FFFF007B" FontSize="20" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display" RenderTransformOrigin="0.746,0.487" Opacity="0.5" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" MouseLeftButtonDown="ExitPromptDenied"/>
+
+
+        </Grid>
+        <Rectangle x:Name="TitleBar" Height="20.401" VerticalAlignment="Top" MouseLeftButtonDown="TitleBar_MouseLeftBtnDown" Fill="White" Width="1200"/>
+        <Grid x:Name="TitleBarButtonsGrid" Margin="1130.502,-9.311,5,593.599">
+            <TextBlock x:Name="ExitButton" HorizontalAlignment="Left" Height="28.067" Margin="39.499,1.645,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="24.999" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Light" Foreground="#FFFF007B" Opacity="0.5" TextAlignment="Center" FontSize="24" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" MouseLeftButtonDown="ExitButtonClicked"><Run Text="x"/><LineBreak/><Run/></TextBlock>
+            <TextBlock x:Name="MinimizeButton" HorizontalAlignment="Left" Height="29.712" TextWrapping="Wrap" VerticalAlignment="Top" Width="34.499" FontFamily="/Slider;component/Resource/Fonts/#Pulp Display Light" Foreground="#FFFF007B" Opacity="0.5" TextAlignment="Center" FontSize="24" MouseEnter="HighlightZoneEntered" MouseLeave="HighlightZoneExited" Text="_" MouseLeftButtonDown="Minimize" RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</Window>
