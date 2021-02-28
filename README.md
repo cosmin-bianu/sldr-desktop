@@ -20,7 +20,7 @@
     <img src="img/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">SLDR Desktop</h3>
+  <h3 align="center">Slider Desktop</h3>
 
   <p align="center">
     Windows application used to turn Android phones into presentation remote controls. It support multiple presenters and is able to lock individual presenter's devices. It's also capable of running single presenter mode with the ability to switch the currently presenting device. This project earned my computer science certificate in my final year of high school (2019).
